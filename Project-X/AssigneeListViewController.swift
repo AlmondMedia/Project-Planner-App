@@ -52,19 +52,22 @@ class AssigneeListViewController: UIViewController, UITableViewDelegate, UITable
 
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return App.Data.Assignees.count
+        return App.Memory.selectedProject!.Contacts.count
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("assigneeCell", forIndexPath: indexPath) as! AssigneeTableViewCell
         
         
-        let item = App.Data.Assignees[indexPath.row];
+        let item = App.Memory.selectedProject!.Contacts[indexPath.row];
         
         cell.assignee = item;
         
         return cell
     }
 
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        App.Memory.selectedAssignee = App.Memory.selectedProject!.Contacts[indexPath.row];
+    }
 
 }

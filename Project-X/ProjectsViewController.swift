@@ -16,14 +16,24 @@ class ProjectsViewController: UIViewController, UICollectionViewDataSource, UICo
 
         (projectsCollectionView.collectionViewLayout as! UICollectionViewFlowLayout).minimumInteritemSpacing = CGFloat.max;
         
+        App.ProjectsReloadedEvent.addHandler {self.refereshView()}
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        projectsCollectionView.reloadData();
+        App.ResetMemory();
+        refereshView();
     
     }
+    
+    func refereshView()
+    {
+        dispatch_async(dispatch_get_main_queue()) {
+           self.projectsCollectionView.reloadData();
+        }
+    }
+    
     
     @IBAction func openDrawerToggle(sender: AnyObject) {
         (self.navigationController!.parentViewController as! KYDrawerController).setDrawerState(KYDrawerController.DrawerState.Opened, animated: true)

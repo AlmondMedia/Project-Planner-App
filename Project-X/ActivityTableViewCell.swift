@@ -13,6 +13,8 @@ class ActivityTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         completedSwitch.transform = CGAffineTransformMakeScale(0.75, 0.75)
+        //completedSwitch.thumbTintColor = App.successColor
+        completedSwitch.onTintColor = UIColor.blackColor()
         // Initialization code
     }
 
@@ -42,47 +44,48 @@ class ActivityTableViewCell: UITableViewCell {
         
         dueDaysLabel.text = activity.DueInDays.description
         titleLabel.text = activity.Title;
-        costLabel.text = UtilityCode.numToCurrency(activity.Cost);
-        completedSwitch.hidden = true;
+        costLabel.text = X.numToCurrency(activity.Cost);
+        completedSwitch.hidden = false;
         
         dueStaticLabel.text = "DUE IN";
         daysStaticLabel.text = "DAYS";
         
         if(activity.DueInDays < 0)
         {
-            statusColorView.backgroundColor = UIColor(red: 0.86, green: 0.25, blue: 0.22, alpha: 1.0)
+            statusColorView.backgroundColor = App.dangerColor
             dueStaticLabel.text = "OVERDUE";
             dueDaysLabel.text = (activity.DueInDays * -1).description
             daysStaticLabel.text = activity.DueInDays < -1 ? "DAYS AGO" : "DAY AGO" ;
         }
         else if( activity.DueInDays == 0)
         {
-            statusColorView.backgroundColor = UIColor(red: 0.95, green: 0.73, blue: 0.07, alpha: 1.0)
+            statusColorView.backgroundColor = App.warningColor
             dueStaticLabel.text = "DUE";
             dueDaysLabel.text = "!";
             daysStaticLabel.text = "TODAY";
         }
         else
         {
-            statusColorView.backgroundColor = UIColor.whiteColor();
+            statusColorView.backgroundColor = App.defaultColor
             daysStaticLabel.text = activity.DueInDays > 1 ? "DAYS" : "DAY";
         }
         
         if(activity.IsCompleted == true)
         {
-            statusColorView.backgroundColor = UIColor(red: 0.32, green: 0.65, blue: 0.33, alpha: 1.0)
+            statusColorView.backgroundColor = App.successColor
             
             dueDaysLabel.hidden = true;
             dueStaticLabel.hidden = true;
             daysStaticLabel.hidden = true;
             doneIconImage.hidden = false;
+            completedSwitch.on = true
         }
         else{
             dueDaysLabel.hidden = false;
             dueStaticLabel.hidden = false;
             daysStaticLabel.hidden = false;
             doneIconImage.hidden = true;
-            completedSwitch.hidden = false;
+            completedSwitch.on = false
         }
 
     }
@@ -95,6 +98,14 @@ class ActivityTableViewCell: UITableViewCell {
             UpdateUI();
             
         }
+        else{
+            activity.CompletionDate = nil
+            activity.IsCompleted = false;
+            UpdateUI();
+        }
+        
+        App.CurrentTaskChangedEvent.raise();
+        
     }
     
 }

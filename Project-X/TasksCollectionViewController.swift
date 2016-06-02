@@ -20,7 +20,7 @@ class TasksCollectionViewController: UICollectionViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
+        App.Memory.selectedTask = nil;
         self.collectionView?.reloadData();
     }
     
@@ -47,12 +47,13 @@ class TasksCollectionViewController: UICollectionViewController {
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
-        if(indexPath.row == 0) {
-            return CGSize(width: screenWidth, height: screenWidth/2);
-        }
-        else {
-            return CGSize(width: screenWidth/2, height: screenWidth/2);
-        }
+//        if(indexPath.row == 0) {
+//            return CGSize(width: screenWidth, height: screenWidth/2);
+//        }
+//        else {
+//            return CGSize(width: screenWidth/2, height: screenWidth/2);
+//        }
+        return CGSize(width: screenWidth, height: screenWidth/2);
         
     }
 
@@ -64,31 +65,36 @@ class TasksCollectionViewController: UICollectionViewController {
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return App.Data.Projects[0].ProjectItems[0].Tasks.count;
+        return App.Memory.selectedProject!.Tasks.count;
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("taskCell", forIndexPath: indexPath) as! TaskCollectionViewCell
     
-        cell.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1).CGColor;
+        cell.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.05).CGColor;
         cell.layer.borderWidth = 0.5;
         cell.layer.cornerRadius = 0;
         if((indexPath.row+1) % 4 == 3 || (indexPath.row+1) % 4 == 0){
             //cell.layer.frame.insetInPlace(dx: 0, dy: -0.5);
+            
         }
         if((indexPath.row + 1) % 2 == 0){
             //cell.layer.frame.insetInPlace(dx: -0.5, dy: 0);
         }
+        
+        if((indexPath.row % 2) != 0) {
+            //cell.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.01)
+        }
 
         
         
-        cell.task = App.Data.Projects[0].ProjectItems[0].Tasks[indexPath.row]
+        cell.task = App.Memory.selectedProject!.Tasks[indexPath.row]
     
         return cell
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        App.Memory.selectedTask = App.Data.Projects[0].ProjectItems[0].Tasks[indexPath.row];
+        App.Memory.selectedTask = App.Memory.selectedProject!.Tasks[indexPath.row];
     }
 
 

@@ -16,16 +16,7 @@ class ProjectTemplate {
     var Description : String = "";
     var Details = [String: String]();
     
-    var DefaultProjectItemTemplate : ProjectItemTemplate?;
-    var ProjectItemTemplates : [ProjectItemTemplate] = []
-}
-
-class ProjectItemTemplate {
-    var Title : String = "";
-    var Details = [String: String]();
-    
     var TaskTemplates : [TaskTemplate] = []
-    
 }
 
 class TaskTemplate {

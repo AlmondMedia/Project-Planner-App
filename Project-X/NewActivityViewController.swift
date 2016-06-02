@@ -13,24 +13,35 @@ class NewActivityViewController: UIViewController, UITextFieldDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.costTextBox.amount = 0;
-        self.costTextBox.currencyNumberFormatter = UtilityCode.getCurrencyFormatter()
-        
-        selectedDate = NSDate().tommorrow
-        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
-        dueDateTextBox.text = dateFormatter.stringFromDate(selectedDate)
+        if(editActivity == nil){
+            self.costTextBox.currencyNumberFormatter = X.getCurrencyFormatter()
+            self.costTextBox.amount = 0;
+            selectedDate = NSDate().tommorrow
+            dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+            dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+            dueDateTextBox.text = dateFormatter.stringFromDate(selectedDate)
+        }else{
+            self.titleTextBox.text = editActivity!.Title
+            self.costTextBox.currencyNumberFormatter = X.getCurrencyFormatter()
+            self.costTextBox.amount = editActivity!.Cost;
+            selectedDate = editActivity!.DueDate;
+            dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+            dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+            dueDateTextBox.text = dateFormatter.stringFromDate(selectedDate)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         self.dismissKeyboard();
+        self.titleTextBox.becomeFirstResponder()
     }
     func dismissKeyboard() {
         view.endEditing(true)
     }
     
+    var editActivity = App.Memory.selectedActivity
     
     @IBOutlet weak var titleTextBox: UITextField!;
     @IBOutlet weak var dueDateTextBox: UITextField!;
@@ -60,8 +71,15 @@ class NewActivityViewController: UIViewController, UITextFieldDelegate  {
     }
     
     @IBAction func save(sender: AnyObject) {
-        let activity = App.CreateActivity(titleTextBox.text!, date : selectedDate, cost : Double(costTextBox.amount), template : nil);
-        App.Memory.selectedTask?.Activities.append(activity);
+        
+        if(editActivity == nil){
+            let activity = App.CreateActivity(titleTextBox.text!, date : selectedDate, cost : Double(costTextBox.amount), template : nil);
+            App.Memory.selectedTask?.Activities.append(activity);
+        } else {
+            editActivity!.Title = titleTextBox.text!;
+            editActivity!.Cost = NSDecimalNumber(double: costTextBox.amount.doubleValue)
+            editActivity!.DueDate = selectedDate;
+        }
         self.navigationController?.popViewControllerAnimated(true)
         
     }

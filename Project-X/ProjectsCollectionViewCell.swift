@@ -13,8 +13,8 @@ class ProjectsCollectionViewCell: UICollectionViewCell {
     var project : Project =  Project() {
         didSet{
             titleLabel.text = project.Title;
-            dueDate.text = UtilityCode.getDateString(project.EndDate, format: "dd MMM yyyy")
-            templateImage.image = UIImage(named: "ui-image-\(project.Template.Title)")
+            dueDate.text = X.getDateString(project.DueDate, format: "dd MMM yyyy")
+            templateImage.image = UIImage(named: "ui-image-\(project.ProjectType)")
         }
     }
     @IBOutlet weak var cardView: CardView!

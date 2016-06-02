@@ -20,6 +20,8 @@ class AssigneeTableViewCell: UITableViewCell {
         self.photoImage.layer.borderColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2).CGColor
         self.roleLabel.layer.cornerRadius = 5.0
         self.roleLabel.clipsToBounds = true;
+        
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -31,14 +33,34 @@ class AssigneeTableViewCell: UITableViewCell {
     var assignee : Assignee = Assignee() {
         didSet{
             nameLabel.text = assignee.Name
-            roleLabel.text = assignee.JobTitle
-            photoImage.image = UIImage(named: "ui-image-assignee-\(assignee.Id)") ?? UIImage(named: "ui-image-default-assignee-profile")
+            roleLabel.text = assignee.Profession
+            
+            //photoImage.image = UIImage(named: "ui-image-assignee-\(assignee.Id)") ?? UIImage(named: "ui-image-default-assignee-profile")
+            
+            if(assignee.Email != ""){
+                photoImage.image = X.getImage(ImageGroup.Assignees, name: assignee.Email)
+            }
+            else{
+                photoImage.image = nil;
+            }
+            
+            initialsLabel.text = X.getInitials(assignee.Name);
+            
+            if(photoImage.image != nil){
+                initialsCircleView.hidden = true
+            }
+            else{
+                initialsCircleView.hidden = false
+                initialsCircleView.updateRadius();
+            }
         }
     }
     
     @IBOutlet weak var photoImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var roleLabel: UILabel!
+    @IBOutlet weak var initialsLabel: UILabel!
+    @IBOutlet weak var initialsCircleView: CircleView!
     
     
 

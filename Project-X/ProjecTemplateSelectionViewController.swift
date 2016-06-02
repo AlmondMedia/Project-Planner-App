@@ -28,16 +28,25 @@ class ProjecTemplateSelectionViewController: UIViewController, UICollectionViewD
         self.view.addConstraint(topConstraint)
         filter.addTarget(self, action: #selector(ProjecTemplateSelectionViewController.segmentChanged(_:)), forControlEvents: .ValueChanged)
         
+        templateGroups = [App.Data.Templates,[], []];
+        selectedTemplateGroup = templateGroups[0];
         
         self.calculateScreenSizeLayout();
     }
-
+    
+    var templateGroups : [[ProjectTemplate]] = [App.Data.Templates,[], []];//= App.Data.Templates;
+    var selectedTemplateGroup : [ProjectTemplate] = [];
+    
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         let bar : UINavigationBar = (self.navigationController?.navigationBar)!
         
         self.searchHierarchyForBorder(bar)
+        
+        
+        
     }
     
     var screenWidth: CGFloat!
@@ -61,9 +70,9 @@ class ProjecTemplateSelectionViewController: UIViewController, UICollectionViewD
         let filter : FilterBar = sender as! FilterBar
         
         let index : NSInteger = filter.selectedSegmentIndex
-        //let string : String = filter.titles[index]
         
-        //self.displayLabel.text = String(format: "Segment %i : %@", index, string)
+        selectedTemplateGroup = templateGroups[index];
+        self.collectionView.reloadData();
         
     }
     
@@ -105,7 +114,7 @@ class ProjecTemplateSelectionViewController: UIViewController, UICollectionViewD
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return App.Data.Templates.count
+        return selectedTemplateGroup.count
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -122,7 +131,7 @@ class ProjecTemplateSelectionViewController: UIViewController, UICollectionViewD
         }
         // Configure the cell
         let index = indexPath.row;
-        let template = App.Data.Templates[index];
+        let template = selectedTemplateGroup[index];
         cell.titleLabel?.text = template.Title
         cell.descriptionLabel.text = template.Description
         cell.mainImageView?.image = UIImage(named:"ui-image-" + template.Title);
@@ -133,7 +142,7 @@ class ProjecTemplateSelectionViewController: UIViewController, UICollectionViewD
 
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        App.Memory.selectedTemplate = App.Data.Templates[indexPath.row];
+        App.Memory.selectedTemplate = selectedTemplateGroup[indexPath.row];
     }
     // MARK: UICollectionViewDelegate
 

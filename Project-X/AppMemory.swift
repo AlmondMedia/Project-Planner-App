@@ -15,4 +15,7 @@ class AppMemory
     var selectedTask : Task? = nil;
     var selectedActivity : Activity? = nil;
     var selectedAssignee : Assignee? = nil;
+    
+    var selectedPaymentTask : Task? = nil;
+    var selectedPayment : Payment? = nil;
 }

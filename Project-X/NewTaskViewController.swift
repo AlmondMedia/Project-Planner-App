@@ -13,26 +13,36 @@ class NewTaskViewController:  UIViewController, UITextFieldDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if(editTask == nil){
+            self.budgetTextBox.currencyNumberFormatter = X.getCurrencyFormatter()
+            self.budgetTextBox.amount = 0;
+            selectedDate = NSDate().tommorrow
+            dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+            dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+            dueDateTextBox.text = dateFormatter.stringFromDate(selectedDate)
+        }else{
+            self.titleTextBox.text = editTask!.Title
+            self.budgetTextBox.currencyNumberFormatter = X.getCurrencyFormatter()
+            self.budgetTextBox.amount = editTask!.Budget;
+            selectedDate = editTask!.DueDate;
+            dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+            dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+            dueDateTextBox.text = dateFormatter.stringFromDate(selectedDate)
+        }
         
-        //self.budgetTextBox.delegate = self;
-        self.budgetTextBox.amount = 0;
-        self.budgetTextBox.currencyNumberFormatter = UtilityCode.getCurrencyFormatter()
-        
-        selectedDate = NSDate().tommorrow
-        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
-        dueDateTextBox.text = dateFormatter.stringFromDate(selectedDate)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         self.dismissKeyboard();
+        self.titleTextBox.becomeFirstResponder()
     }
     func dismissKeyboard() {
         view.endEditing(true)
     }
     
+    var editTask = App.Memory.selectedTask
     
     @IBOutlet weak var titleTextBox: UITextField!;
     @IBOutlet weak var dueDateTextBox: UITextField!;
@@ -62,8 +72,14 @@ class NewTaskViewController:  UIViewController, UITextFieldDelegate  {
     }
     
     @IBAction func save(sender: AnyObject) {
-        let task = App.CreateTask(titleTextBox.text!, date : selectedDate, budget : Double(budgetTextBox.amount), template : nil);
-        App.Memory.selectedProject?.ProjectItems[0].Tasks.append(task);
+        if(editTask == nil){
+            let task = App.CreateTask(titleTextBox.text!, date : selectedDate, budget : Double(budgetTextBox.amount), template : nil);
+            App.Memory.selectedProject!.Tasks.append(task);
+        } else {
+            editTask!.Title = titleTextBox.text!;
+            editTask!.Budget = NSDecimalNumber(double: budgetTextBox.amount.doubleValue)
+            editTask!.DueDate = selectedDate;
+        }
         self.navigationController?.popViewControllerAnimated(true)
         
     }

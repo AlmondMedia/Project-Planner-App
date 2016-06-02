@@ -8,15 +8,15 @@
 
 import UIKit
 
-class CurrentProjectTabViewController: BFPaperTabBarController {
+class CurrentProjectTabViewController : UITabBarController {//: BFPaperTabBarController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    //override func viewDidLoad() {
+    //    super.viewDidLoad()
         
         
 
         // Do any additional setup after loading the view.
-    }
+    //}
     
     
    

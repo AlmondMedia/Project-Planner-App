@@ -52,14 +52,14 @@ class AssignTaskViewController: UIViewController, UITableViewDelegate, UITableVi
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return App.Data.Assignees.count
+        return App.Memory.selectedProject!.Contacts.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("assigneeCell", forIndexPath: indexPath) as! AssignTaskTableViewCell
         
         
-        let item = App.Data.Assignees[indexPath.row];
+        let item = App.Memory.selectedProject!.Contacts[indexPath.row];
         
         cell.assignee = item;
         
@@ -67,7 +67,7 @@ class AssignTaskViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let item = App.Data.Assignees[indexPath.row];
+        let item = App.Memory.selectedProject!.Contacts[indexPath.row];
         App.Memory.selectedTask?.Assignee_Id = item.Id
         self.tableView.reloadData();
     }

@@ -31,7 +31,7 @@ class AssignTaskTableViewCell: UITableViewCell {
     var assignee : Assignee = Assignee() {
         didSet{
             nameLabel.text = assignee.Name
-            roleLabel.text = assignee.JobTitle
+            roleLabel.text = assignee.Profession
             photoImage.image = UIImage(named: "ui-image-assignee-\(assignee.Id)") ?? UIImage(named: "ui-image-default-assignee-profile")
             if(App.Memory.selectedTask?.Assignee_Id == assignee.Id){
                 checkMarkImage.hidden = false;

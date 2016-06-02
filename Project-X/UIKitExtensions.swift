@@ -39,13 +39,39 @@ class CircleImageView : UIImageView
         let cornerRadius = self.frame.size.width / 2.0;
         self.layer.cornerRadius = cornerRadius;
         self.clipsToBounds = true;
-        self.layer.borderWidth = 2.0;
-        self.layer.borderColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.1).CGColor
+        self.layer.borderWidth = 1.0;
+        self.layer.borderColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.1).CGColor
         //self.layer.cornerRadius = 5.0
         self.clipsToBounds = true;
     }
+    
+    func setRadius(radius : CGFloat)
+    {
+        self.layer.cornerRadius = radius;
+    }
 }
 
+
+class CircleView : UIView
+{
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        let cornerRadius = self.frame.size.height / 2.0;
+        self.layer.cornerRadius = cornerRadius;
+        self.clipsToBounds = true;
+        self.layer.borderWidth = 1.0;
+        self.layer.borderColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.1).CGColor
+        //self.layer.cornerRadius = 5.0
+        self.clipsToBounds = true;
+    }
+    
+    
+    func updateRadius()
+    {
+        self.layer.cornerRadius = self.frame.size.height / 2.0;
+    }
+}
 //extension UIViewController {
 //    public override class func initialize() {
 //        struct Static {
