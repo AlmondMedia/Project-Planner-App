@@ -16,10 +16,12 @@ class App{
     {
         
         App.PrepareTemplates();
-        App.PrepareProjects();
         App.PrepareCustomUI();
-        App.setupNetwork();
+        App.LoadLocalData();
         
+        if(App.Data.User.AccessToken != ""){
+            App.CreatProjectHub()
+        }
         
     }
     
@@ -33,43 +35,65 @@ class App{
         App.Memory.selectedTemplate = nil;
     }
     
+    static func LoadLocalData()
+    {
+        let content = X.LoadDataFromDir("App.data")
+        App.Data = AppModel(json: content)
+    }
+    
+    static func SaveLocalData()
+    {
+        //App.Data.SyncTimestamp = NSDate()
+        let content = App.Data.toJsonString()
+        X.SaveToDataDir("App.data", content: content)
+    }
+    
+    static func SignOut()
+    {
+        App.Data.User.AccessToken = "";
+        App.Data.SyncTimestamp = NSDate()
+        App.SaveLocalData()
+        
+        App.CreatProjectHub()
+    }
+    
     static func PrepareTemplates()
     {
         let template1 = ProjectTemplate()
         template1.Title = "Building"
         template1.Description = "Lorem ipsum det imet gout et las vivas dout items"
-        App.Data.Templates.append(template1)
+        App.Memory.Templates.append(template1)
         
         
         let template4 = ProjectTemplate()
         template4.Title = "Landscaping"
         template4.Description = "Lorem ipsum det imet gout et las vivas dout items"
-        App.Data.Templates.append(template4)
+        App.Memory.Templates.append(template4)
         
         
         
         let template3 = ProjectTemplate()
         template3.Title = "Gardning"
         template3.Description = "Lorem ipsum det imet gout et las vivas dout items"
-        App.Data.Templates.append(template3)
+        App.Memory.Templates.append(template3)
         
         
         let template5 = ProjectTemplate()
         template5.Title = "Renovation"
         template5.Description = "Lorem ipsum det imet gout et las vivas dout items"
-        App.Data.Templates.append(template5)
+        App.Memory.Templates.append(template5)
         
         
         let template2 = ProjectTemplate()
         template2.Title = "Extension"
         template2.Description = "Lorem ipsum det imet gout et las vivas dout items"
-        App.Data.Templates.append(template2)
+        App.Memory.Templates.append(template2)
         
         
         let template6 = ProjectTemplate()
         template6.Title = "Repairs"
         template6.Description = "Lorem ipsum det imet gout et las vivas dout items"
-        App.Data.Templates.append(template6)
+        App.Memory.Templates.append(template6)
         
         
         
@@ -77,7 +101,7 @@ class App{
     
     static func PrepareProjects()
     {
-        let project1 = App.CreateProject("Home Repair", date: NSDate().addDays(13), budget: 82000.0, template: App.Data.Templates[4])
+        let project1 = App.CreateProject("Home Repair", date: NSDate().addDays(13), budget: 82000.0, template: App.Memory.Templates[4])
         App.Data.Projects = [project1]
         
         
@@ -184,7 +208,7 @@ class App{
         project.Contacts[3].Email = "m.kowalek@mail.com";
         
         project.Contacts[4].Id = 6
-        project.Contacts[4].Name = "Jonny Smith";
+        project.Contacts[4].Name = "John Smith";
         project.Contacts[4].Profession = "Painter";
         project.Contacts[4].Email = "j.smith@mail.com";
         
@@ -194,6 +218,24 @@ class App{
         project.Contacts[6].Email = "a.white@mail.com";
         
         //App.Data.Assignees = assignees;
+    }
+    
+    
+    static func getTemplates()
+    {
+        
+        let filePath = NSBundle.mainBundle().pathForResource("templates", ofType: "json")
+        
+        // get the contentData
+        let contentData = NSFileManager.defaultManager().contentsAtPath(filePath!)
+        
+        // get the string
+        var content = NSString(data: contentData!, encoding: NSUTF8StringEncoding) as? String
+        content = content?.stringByReplacingOccurrencesOfString("\n", withString: "")
+        content = content?.stringByReplacingOccurrencesOfString("\t", withString: "")
+        print(content)
+        let templates = TemplateJson(json: content);
+        print(templates);
     }
     
     

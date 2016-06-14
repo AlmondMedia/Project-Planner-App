@@ -29,6 +29,8 @@ class TaskActivitiesViewController: UIViewController , UITableViewDataSource, UI
         super.viewDidLoad()
         
         App.CurrentTaskChangedEvent.addHandler {self.reloadData()}
+        App.ActivitiesReloadedEvent.addHandler {self.reloadData()}
+        App.CurrentActivityChangedEvent.addHandler {self.reloadData()}
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -41,12 +43,21 @@ class TaskActivitiesViewController: UIViewController , UITableViewDataSource, UI
     var task : Task = Task()
     
     func reloadData() {
+        task = App.Memory.selectedTask!;
         self.navigationItem.title = "TASK";
         taskTitleLabel.text = task.Title.uppercaseString
         let assignee = App.getTaskAssignee(task);
         self.assigneeNameLabel.text = assignee?.Name
-        let image = UIImage(named: "ui-image-assignee-\(task.Assignee_Id)")
-        self.assigneeImageView.image = image;
+        if(assignee != nil){
+            let image = X.getImage(ImageGroup.Assignees, name: assignee!.ResourceUID)
+            self.assigneeImageView.image = image;
+            
+        }
+        
+        if(assigneeImageView.image == nil){
+            assigneeImageView.setImageWithString(assignee?.Name ?? "")
+        }
+        
         self.taskBudgetLabel.text = X.formatNumber(task.Budget)
         self.taskDaysLeft.text = X.getDaysBetweenDate(NSDate().endOfYesterday, endDate:  task.DueDate).description
         //self.taskActivitiesLeft.text = task.Activities.filter({ (item) -> Bool in
@@ -63,6 +74,20 @@ class TaskActivitiesViewController: UIViewController , UITableViewDataSource, UI
         // 2
         let deleteAction = UIAlertAction(title: "Delete Task", style: .Destructive, handler: {
             (alert: UIAlertAction!) -> Void in
+            
+            
+            let actions = [UIAlertAction(title: "No", style: .Default,handler: nil),
+                UIAlertAction(title: "Delete", style: .Default, handler: { (action) -> Void in
+                    App.projectHub?.invoke("deleteTask", arguments: [App.Memory.selectedTask!.Id]){ (result, error) in
+                        
+                    }
+                App.Memory.selectedProject?.Tasks.removeAtIndex((App.Memory.selectedProject?.Tasks.indexOf(App.Memory.selectedTask!))!)
+                    App.Memory.selectedTask = nil;
+                    self.navigationController?.popViewControllerAnimated(true)
+                })]
+            
+            App.displayAlert(self, title: "Delete Task", message: "Do you want to go ahead and remove this task from your project?", actions: actions);
+            
             
         })
         let editAction = UIAlertAction(title: "Edit Task", style: .Default, handler: {
@@ -142,12 +167,15 @@ class TaskActivitiesViewController: UIViewController , UITableViewDataSource, UI
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if(indexPath.row < task.Activities.count){
             App.Memory.selectedActivity = task.Activities[indexPath.row];
+            self.performSegueWithIdentifier("editActivitySegue", sender: self)
         }
-        tableView.selectRowAtIndexPath(nil, animated: true, scrollPosition: UITableViewScrollPosition.Top)
+        //tableView.selectRowAtIndexPath(nil, animated: true, scrollPosition: UITableViewScrollPosition.Top)
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return indexPath.row < task.Activities.count
+        let result = indexPath.row < task.Activities.count
+        
+        return result;
     }
     
     func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
@@ -166,6 +194,8 @@ class TaskActivitiesViewController: UIViewController , UITableViewDataSource, UI
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         if(indexPath.row < task.Activities.count){
             return [UITableViewRowAction(style: .Default, title: "Delete", handler: { (action, indexPath) in
+                
+                App.deleteActivity(self.task.Activities[indexPath.row])
                 self.task.Activities.removeAtIndex(indexPath.row)
                 App.Memory.selectedActivity = nil
                 App.CurrentTaskChangedEvent.raise();

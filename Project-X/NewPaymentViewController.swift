@@ -92,6 +92,8 @@ class NewPaymentViewController: UIViewController , UITextFieldDelegate  {
             editPayment!.DateTime = selectedDate;
             editPayment!.ReceivedBy = paidToTextBox.text!;
         }
+        
+        App.pushTask(App.Memory.selectedProject!, task: App.Memory.selectedPaymentTask!)
         self.navigationController?.popViewControllerAnimated(true)
         
     }

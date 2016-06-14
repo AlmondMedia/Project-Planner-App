@@ -13,7 +13,7 @@ extension App {
     static func CreateProject(title: String, date : NSDate, budget: Double, template: ProjectTemplate?) -> Project
     {
         let project = Project()
-        project.Id = App.Data.NewId;
+        //project.Id = App.Data.NewId;
         project.Title = title
         project.Budget = NSDecimalNumber(double: budget)
         project.DueDate = date
@@ -37,7 +37,7 @@ extension App {
     static func CreateTask(title: String, date : NSDate, budget: Double, template : TaskTemplate?) -> Task
     {
         let task = Task()
-        task.Id = App.Data.NewId;
+        //task.Id = App.Data.NewId;
         task.Title = title
         task.Budget = NSDecimalNumber(double: budget)
         task.DueDate = date
@@ -62,7 +62,7 @@ extension App {
     static func CreateActivity(title: String, date : NSDate, cost: Double, template : ActivityTemplate?) -> Activity
     {
         let activity = Activity()
-        activity.Id = App.Data.NewId;
+        //activity.Id = App.Data.NewId;
         activity.Title = title
         activity.Cost = NSDecimalNumber(double: cost)
         activity.DueDate = date
@@ -115,7 +115,7 @@ extension App {
     }
     
     static func getTaskAssignee(task : Task) -> Assignee?{
-        let assignees = App.Data.Assignees.filter{$0.Id == task.Assignee_Id}
+        let assignees = App.Memory.selectedProject!.Contacts.filter{$0.Email == task.AssigneeLink }
         if(assignees.isEmpty){
             return nil;
         }

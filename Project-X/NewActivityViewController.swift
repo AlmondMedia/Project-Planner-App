@@ -57,7 +57,7 @@ class NewActivityViewController: UIViewController, UITextFieldDelegate  {
         datePickerView.date = selectedDate
         sender.inputView = datePickerView
         
-        datePickerView.addTarget(self, action: #selector(NewProjectViewController.datePickerValueChanged), forControlEvents: UIControlEvents.ValueChanged)
+        datePickerView.addTarget(self, action: #selector(NewActivityViewController.datePickerValueChanged), forControlEvents: UIControlEvents.ValueChanged)
     }
     func datePickerValueChanged(sender:UIDatePicker) {
         
@@ -75,11 +75,14 @@ class NewActivityViewController: UIViewController, UITextFieldDelegate  {
         if(editActivity == nil){
             let activity = App.CreateActivity(titleTextBox.text!, date : selectedDate, cost : Double(costTextBox.amount), template : nil);
             App.Memory.selectedTask?.Activities.append(activity);
+            App.pushActivity(App.Memory.selectedTask!, activity: activity)
         } else {
             editActivity!.Title = titleTextBox.text!;
             editActivity!.Cost = NSDecimalNumber(double: costTextBox.amount.doubleValue)
             editActivity!.DueDate = selectedDate;
+            App.pushActivity(App.Memory.selectedTask!, activity: editActivity!)
         }
+        
         self.navigationController?.popViewControllerAnimated(true)
         
     }

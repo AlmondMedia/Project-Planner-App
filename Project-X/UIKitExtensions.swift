@@ -72,39 +72,52 @@ class CircleView : UIView
         self.layer.cornerRadius = self.frame.size.height / 2.0;
     }
 }
-//extension UIViewController {
-//    public override class func initialize() {
-//        struct Static {
-//            static var token: dispatch_once_t = 0
-//        }
-//        
-//        // make sure this isn't a subclass
-//        if self !== UIViewController.self {
-//            return
-//        }
-//        
-//        dispatch_once(&Static.token) {
-//            let originalSelector = Selector("viewWillAppear:")
-//            let swizzledSelector = Selector("nsh_viewWillAppear:")
-//            
-//            let originalMethod = class_getInstanceMethod(self, originalSelector)
-//            let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
-//            
-//            let didAddMethod = class_addMethod(self, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
-//            
-//            if didAddMethod {
-//                class_replaceMethod(self, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
-//            } else {
-//                method_exchangeImplementations(originalMethod, swizzledMethod)
-//            }
-//        }
-//    }
-//    
-//    // MARK: - Method Swizzling
-//    
-//    func nsh_viewWillAppear(animated: Bool) {
-//        self.nsh_viewWillAppear(animated)
-//    
-//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "App-BG")!)
-//    }
-//}
+
+extension UIView {
+    @IBInspectable var borderUIColor: UIColor? {
+        get {
+            if let colorRef = layer.borderColor {
+                return UIColor(CGColor: colorRef)
+            }
+            
+            return nil
+        }
+        set {
+            layer.borderColor = newValue?.CGColor
+        }
+    }
+}
+
+class SaveBarButtonItem: UIButton {
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        let color = App.primaryColor
+        self.layer.borderWidth = 1;
+        self.layer.borderColor = color.CGColor; //AppUIAdaptor.tintColor.CGColor
+        self.layer.backgroundColor =  UIColor.clearColor().CGColor //UIColor.clearColor().CGColor // AppUIAdaptor.tintColorAction.CGColor // UIColor.clearColor().CGColor //
+        self.layer.cornerRadius = 5;
+        self.layer.masksToBounds = true;
+        self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+        self.frame.origin.x = 110.0
+        self.frame.size.width = 60.0
+        
+        self.setTitleColor(color, forState: .Normal)
+        self.setTitle("SAVE", forState: .Normal)
+        
+    }
+    
+    override func setTitle(title: String?, forState state: UIControlState) {
+        
+        self.titleLabel?.font = UIFont.systemFontOfSize(17.0)
+        self.titleLabel?.textColor = App.tintColor //UIColor.whiteColor();
+        self.layer.borderColor = App.primaryColor.CGColor
+        
+        super.setTitle("SAVE", forState: state)
+    }
+    
+    override func alignmentRectInsets() -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 5.0);
+    }
+}

@@ -222,15 +222,16 @@ class X{
    
     static func getImage(container: ImageGroup, name: String) -> UIImage? {
         let assigneeDir = getDocumentsURL().URLByAppendingPathComponent("Images/\(container)");
-        let filePath = assigneeDir.URLByAppendingPathComponent(name).path! + ".png";
+        let filePath = assigneeDir.URLByAppendingPathComponent(name).path! + ".jpg";
         return UIImage(contentsOfFile: filePath)
         
     }
     static func setImage(container: ImageGroup, name: String, image : UIImage){
-        let pngImageData = UIImagePNGRepresentation(image)
+        let compression = 100.0 / image.size.height
+        let pngImageData = UIImageJPEGRepresentation(image, compression)
         
         let assigneeDir = getDocumentsURL().URLByAppendingPathComponent("Images/\(container)");
-        let filePath = assigneeDir.URLByAppendingPathComponent(name).path! + ".png";
+        let filePath = assigneeDir.URLByAppendingPathComponent(name).path! + ".jpg";
         
         let manager = NSFileManager.defaultManager()
         try! manager.createDirectoryAtPath(assigneeDir.path!, withIntermediateDirectories: true, attributes: nil)
@@ -239,8 +240,44 @@ class X{
     
     }
     
-   
+    static func setImage(container: ImageGroup, name: String, data : NSData?){
+        let pngImageData = data
+        
+        let assigneeDir = getDocumentsURL().URLByAppendingPathComponent("Images/\(container)");
+        let filePath = assigneeDir.URLByAppendingPathComponent(name).path! + ".jpg";
+        
+        let manager = NSFileManager.defaultManager()
+        try! manager.createDirectoryAtPath(assigneeDir.path!, withIntermediateDirectories: true, attributes: nil)
+        
+        try! pngImageData!.writeToFile(filePath, options: NSDataWritingOptions.AtomicWrite)
+        
+    }
     
+   
+    static func SaveToDataDir(filename : String, content : String)
+    {
+        let filePath = NSHomeDirectory() + "/Documents/\(filename)"
+        
+        do {
+            _ = try content.writeToFile(filePath, atomically: true, encoding: NSUTF8StringEncoding)
+        } catch let error as NSError {
+            print(error.description)
+        }
+    }
+    
+    static func LoadDataFromDir(filename : String) -> String?
+    {
+        let filePath = NSHomeDirectory() + "/Documents/\(filename)"
+        
+        
+        do {
+            let content = try NSString(contentsOfFile: filePath, encoding: NSUTF8StringEncoding) as String
+            return content
+        } catch let error as NSError {
+            print(error.description)
+            return nil;
+        }
+    }
     
 }
 

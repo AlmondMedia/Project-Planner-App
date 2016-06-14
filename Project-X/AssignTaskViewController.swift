@@ -47,7 +47,7 @@ class AssignTaskViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 44.0;
+        return 56.0;
     }
     
     
@@ -68,7 +68,10 @@ class AssignTaskViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let item = App.Memory.selectedProject!.Contacts[indexPath.row];
-        App.Memory.selectedTask?.Assignee_Id = item.Id
+        App.Memory.selectedTask!.AssigneeLink = item.Email ?? item.Phone
+        
+        App.updateAssignee(App.Memory.selectedProject!, task: App.Memory.selectedTask!)
+        
         self.tableView.reloadData();
     }
 

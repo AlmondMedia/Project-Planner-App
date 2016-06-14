@@ -17,7 +17,7 @@ class ActionListViewController: UIViewController , UITableViewDataSource, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        filter.titles = ["Todo", "Due Today", "Completed"]
+        filter.titles = ["Pending", "Due", "Completed"]
         filter.translucent = false
         self.view.addSubview(filter)
         let topConstraint : NSLayoutConstraint = NSLayoutConstraint(item: filter, attribute: .Top, relatedBy: .Equal, toItem: self.topLayoutGuide, attribute: .Bottom, multiplier: 1.0, constant: 0.0)
@@ -38,6 +38,8 @@ class ActionListViewController: UIViewController , UITableViewDataSource, UITabl
     var selectedActivityGroup : [BoardActivity] = []
 
     @IBAction func accountBtnTapped(sender: AnyObject) {
+        App.Data.SyncTimestamp = NSDate()
+        App.SaveLocalData()
         self.navigationController!.tabBarController!.presentingViewController!.dismissViewControllerAnimated(true, completion: nil);
     }
 

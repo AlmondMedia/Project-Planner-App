@@ -1,0 +1,174 @@
+{
+    "events": {
+        "event": [
+                  {
+                  "title": "Party",
+                  "tasks": {
+                  "task": [
+                           "Venue",
+                           "Cake",
+                           "FoodandDrinks",
+                           "Photography-Video",
+                           "Entertainment",
+                           "Music-DJ",
+                           "Invitations",
+                           "Activities",
+                           "Decorations",
+                           "Setup-Cleanup"
+                           ]
+                  }
+                  },
+                  {
+                  "title": "Birthday",
+                  "tasks": {
+                  "task": [
+                           "Venue",
+                           "Cake",
+                           "FoodandDrinks",
+                           "Photography-Video",
+                           "Entertainment",
+                           "Music-DJ",
+                           "Invitations",
+                           "Activities",
+                           "Decorations",
+                           "Setup-Cleanup"
+                           ]
+                  }
+                  },
+                  {
+                  "title": "Wedding",
+                  "tasks": {
+                  "task": [
+                           "Venue",
+                           "Cake",
+                           "FoodandDrinks",
+                           "Photography-Video",
+                           "Entertainment",
+                           "Music-DJ",
+                           "Invitations",
+                           "Activities",
+                           "Decorations",
+                           "Setup-Cleanup",
+                           "Catering",
+                           "Dresses",
+                           "Band",
+                           "Flowers",
+                           "Rings",
+                           "Transport",
+                           "Honeymoon",
+                           "Favours"
+                           ]
+                  }
+                  },
+                  {
+                  "title": "Anniversary",
+                  "tasks": {
+                  "task": [
+                           "Venue",
+                           "Cake",
+                           "FoodandDrinks",
+                           "Photography-Video",
+                           "Entertainment",
+                           "Music-DJ",
+                           "Invitations",
+                           "Activities",
+                           "Decorations",
+                           "Setup-Cleanup",
+                           "Dinner",
+                           "Holiday",
+                           "Vowrenewals"
+                           ]
+                  }
+                  },
+                  {
+                  "title": "Funeral",
+                  "tasks": {
+                  "task": [
+                           "Embalming",
+                           "Clothingandjewellery",
+                           "Coffin",
+                           "Callinghours",
+                           "Funeralservice",
+                           "Obituary",
+                           "Flowers",
+                           "Eulogy",
+                           "Legalmatters"
+                           ]
+                  }
+                  },
+                  {
+                  "title": "Meeting",
+                  "tasks": {
+                  "task": [
+                           "Guests",
+                           "Scheduling",
+                           "Venue",
+                           "Catering",
+                           "Hotels-rooms",
+                           "Technicalsetup",
+                           "Printouts"
+                           ]
+                  }
+                  },
+                  {
+                  "title": "Exhibition",
+                  "tasks": {
+                  "task": [
+                           "Artist-artselection",
+                           "Photography",
+                           "Catalogue",
+                           "Installation-framing",
+                           "PR",
+                           "Advertising",
+                           "Website",
+                           "Transportationofwork",
+                           "Mediaequipment",
+                           "Sales",
+                           "Setup-cleanup",
+                           "Venue",
+                           "Fundraising-sponsors",
+                           "Staffing"
+                           ]
+                  }
+                  },
+                  {
+                  "title": "Sportevent",
+                  "tasks": {
+                  "task": [
+                           "Venue",
+                           "Sponsors",
+                           "Equipment",
+                           "Teams",
+                           "Marketing",
+                           "Prizes",
+                           "Scheduling",
+                           "Staffing",
+                           "Referees-officials",
+                           "Foodanddrinks",
+                           "Firstaid",
+                           "Transport",
+                           "Licencesandpermissions",
+                           "Speakers"
+                           ]
+                  }
+                  },
+                  {
+                  "title": "Concert",
+                  "tasks": {
+                  "task": [
+                           "Venue",
+                           "Equipment",
+                           "Staff",
+                           "Foodanddrinks",
+                           "Marketing",
+                           "Talent",
+                           "Security",
+                           "Scheduling",
+                           "Photography-Video",
+                           "Tickets"
+                           ]
+                  }
+                  }
+                  ]
+    }
+}

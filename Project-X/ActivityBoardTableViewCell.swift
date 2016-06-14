@@ -51,7 +51,8 @@ class ActivityBoardTableViewCell: UITableViewCell {
         costLabel.text = activity.TaskTitle
         //completedSwitch.hidden = true;
         
-        assigneeImageView.image = UIImage(named: "ui-image-assignee-\(activity.Assignee_Id)") ?? UIImage(named: "ui-image-default-assignee-profile")
+        assigneeImageView.image = nil
+        
         
         dueStaticLabel.text = "DUE IN";
         daysStaticLabel.text = "DAYS";

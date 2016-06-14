@@ -95,15 +95,15 @@ class ActivityTableViewCell: UITableViewCell {
         {
             activity.CompletionDate = NSDate();
             activity.IsCompleted = true;
-            UpdateUI();
+            //UpdateUI();
             
         }
         else{
             activity.CompletionDate = nil
             activity.IsCompleted = false;
-            UpdateUI();
+            //UpdateUI();
         }
-        
+        App.pushActivity(App.Memory.selectedTask!, activity: activity)
         App.CurrentTaskChangedEvent.raise();
         
     }

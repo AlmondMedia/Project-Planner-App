@@ -21,7 +21,13 @@ class AssigneeTableViewCell: UITableViewCell {
         self.roleLabel.layer.cornerRadius = 5.0
         self.roleLabel.clipsToBounds = true;
         
-        
+        photoImage.contentMode = .ScaleAspectFill
+        App.ContactsImageDownloadedEvent.addHandler { (resourceUID) in
+            if(self.assignee.ResourceUID == resourceUID)
+            {
+                self.photoImage.image = X.getImage(ImageGroup.Assignees, name: self.assignee.ResourceUID)
+            }
+        }
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -37,11 +43,14 @@ class AssigneeTableViewCell: UITableViewCell {
             
             //photoImage.image = UIImage(named: "ui-image-assignee-\(assignee.Id)") ?? UIImage(named: "ui-image-default-assignee-profile")
             
-            if(assignee.Email != ""){
-                photoImage.image = X.getImage(ImageGroup.Assignees, name: assignee.Email)
+            if(assignee.ResourceUID != ""){
+                photoImage.image = X.getImage(ImageGroup.Assignees, name: assignee.ResourceUID)
             }
             else{
                 photoImage.image = nil;
+            }
+            if(photoImage.image == nil){
+                photoImage.setImageWithString(assignee.Name)
             }
             
             initialsLabel.text = X.getInitials(assignee.Name);

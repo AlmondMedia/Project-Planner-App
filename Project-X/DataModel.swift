@@ -9,14 +9,14 @@
 import Foundation
 
 
-class AppModel{
-    
-    var lastId : Int = 0
-    var NewId : Int {get {return 0;}}
+class AppModel : EVObject {
+    //var uuid = NSUUID().UUIDString
+    var SyncTimestamp : NSDate =  NSDate(timeIntervalSince1970: 0)
+    var User : AppUser = AppUser()
     var Projects : [Project] = []
-    var Templates : [ProjectTemplate] = []
-    var Assignees : [Assignee] = []
-    var MediaAttachments : [MediaAttachment] = []
+    
+    //var Assignees : [Assignee] = []
+    //var MediaAttachments : [MediaAttachment] = []
     
 }
 
@@ -34,7 +34,7 @@ class AppUser : EVObject{
     
     var Details = [String: String]();
     
-    var Projects : [Project] = []
+    //var Projects : [Project] = []
     
 }
 
@@ -44,8 +44,8 @@ class Project : EVObject {
     var Title : String  = "";
     var ProjectType : String = ""
     var TemplateId : Int = 0;
-    var StartDate : NSDate!
-    var DueDate : NSDate!
+    var StartDate : NSDate = NSDate()
+    var DueDate : NSDate = NSDate()
     var Budget : NSDecimalNumber = 0.0
     var Currency : String = "GBP"
     
@@ -60,10 +60,10 @@ class Project : EVObject {
         return
             [("StartDate", {
                 self.StartDate = X.makeDateFromUniversalDateString($0 as! String) },
-                { return self.StartDate?.description}),
+                { return self.StartDate.localDescription}),
              ("DueDate",
                 { self.DueDate = X.makeDateFromUniversalDateString($0 as! String) },
-                { return self.DueDate?.description})
+                { return self.DueDate.localDescription})
         ]
     }
     
@@ -101,8 +101,8 @@ class Task : EVObject {
     var ProjectTitle : String = ""
     var PlannerName : String = "";
     
-    var StartDate : NSDate!
-    var DueDate : NSDate!
+    var StartDate : NSDate = NSDate()
+    var DueDate : NSDate = NSDate()
     var Budget : NSDecimalNumber = 0.0
     
     var Assignee_Id : Int = 0
@@ -119,10 +119,10 @@ class Task : EVObject {
         return
             [("StartDate", {
                 self.StartDate = X.makeDateFromUniversalDateString($0 as! String) },
-                { return self.StartDate?.description}),
+                { return self.StartDate.localDescription}),
              ("DueDate",
                 { self.DueDate = X.makeDateFromUniversalDateString($0 as! String) },
-                { return self.DueDate?.description})
+                { return self.DueDate.localDescription})
         ]
     }
     
@@ -157,12 +157,12 @@ class Activity : EVObject {
     var TaskId : Int = 0;
     var Title : String  = "";
     var ActivityType : String = ""
-    var StartDate : NSDate!
-    var DueDate : NSDate!
+    var StartDate : NSDate  = NSDate()
+    var DueDate : NSDate  = NSDate()
     var Cost : NSDecimalNumber = 0.0
     
     var DueInDays : Int {
-        get{ return X.getDaysBetweenDate(NSDate().addDays(1), endDate: self.DueDate )}
+        get{ return X.getDaysBetweenDate(NSDate().addDays(0), endDate: self.DueDate )}
     }
     
     var IsCompleted : Bool = false;
@@ -177,19 +177,22 @@ class Activity : EVObject {
         return
             [("CompletionDate", {
                 self.CompletionDate = X.makeDateFromUniversalDateString($0 as! String) },
-                { return self.CompletionDate?.description}),
+                { return self.CompletionDate?.localDescription}),
              ("StartDate", {
                 self.StartDate = X.makeDateFromUniversalDateString($0 as! String) },
-                { return self.StartDate?.description}),
+                { return self.StartDate.localDescription}),
              ("DueDate",
                 { self.DueDate = X.makeDateFromUniversalDateString($0 as! String) },
-                { return self.DueDate?.description})
+                { return self.DueDate.localDescription ; })
         ]
     }
 }
 
 
 class Assignee : EVObject {
+    
+    var ProjectId : Int = 0;
+    
     var Id : Int = 0;
     var Name : String  = "";
     var Email : String  = "";
@@ -198,7 +201,7 @@ class Assignee : EVObject {
     var Bio : String  = "";
     var Profession : String  = "";
     
-    var ResourceUID : String  = "";
+    var ResourceUID : String  = "00000000";
 }
 
 
@@ -207,7 +210,7 @@ class Payment : EVObject {
     var Title : String  = "";
     
     var Amount : NSDecimalNumber = 0.0
-    var DateTime : NSDate!;
+    var DateTime : NSDate = NSDate()
     
     var TaskId : Int = 0;
     var ReceivedBy : String  = "";
@@ -218,20 +221,13 @@ class Payment : EVObject {
         return
             [("DateTime", {
                 self.DateTime = X.makeDateFromUniversalDateString($0 as! String) },
-                { return self.DateTime?.description})
+                { return self.DateTime.localDescription})
         ]
     }
 }
 
 
-class Contact : EVObject{
-    var Id : Int = 0;
-    var Name : String  = "";
-    var Email : String  = "";
-    var Phone : String  = "";
-    var Bio : String  = "";
-    var Profession : String  = "";
-}
+
 
 
 

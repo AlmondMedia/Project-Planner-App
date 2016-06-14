@@ -59,3 +59,20 @@ enum TypeOfProject {
     case Event
     case Holiday
 }
+
+
+
+
+
+class TemplateJson : EVObject
+{
+    var events : [ProjectJson] = []
+    var building : [ProjectJson] = []
+    var travel : [ProjectJson] = []
+}
+
+class ProjectJson : EVObject
+{
+    var title : String = ""
+    var tasks :[String] = []
+}

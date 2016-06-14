@@ -74,13 +74,16 @@ class NewProjectViewController: UIViewController {
         if(editProject == nil){
             let project = App.CreateProject(titleTextBox.text!, date : selectedDate, budget : Double(budgetTextBox.amount), template : App.Memory.selectedTemplate);
             App.Data.Projects.append(project);
+            
+            App.pushProject(project)
         } else{
             editProject!.Title = titleTextBox.text!;
             editProject!.Budget = NSDecimalNumber(double: budgetTextBox.amount.doubleValue)
             editProject!.DueDate = selectedDate;
+            App.pushProject(self.editProject!)
+            
         }
         
-        //Call Save Project
         
         self.navigationController?.popToRootViewControllerAnimated(true)
         

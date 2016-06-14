@@ -11,19 +11,32 @@ import UIKit
 class ProjectsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var projectsCollectionView: UICollectionView!
+    
+    @IBOutlet private weak var lastUpdateButton: UIBarButtonItem!
+    private var lastUpdateLabel = UILabel(frame: CGRectZero)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         (projectsCollectionView.collectionViewLayout as! UICollectionViewFlowLayout).minimumInteritemSpacing = CGFloat.max;
         
         App.ProjectsReloadedEvent.addHandler {self.refereshView()}
+        
+        lastUpdateLabel.sizeToFit()
+        lastUpdateLabel.backgroundColor = UIColor.clearColor()
+        lastUpdateLabel.textAlignment = .Center
+        lastUpdateLabel.font = UIFont.systemFontOfSize(12)
+        lastUpdateButton.customView = lastUpdateLabel
     }
+    
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+        
         App.ResetMemory();
         refereshView();
+        App.syncProjects()
     
     }
     
@@ -31,6 +44,14 @@ class ProjectsViewController: UIViewController, UICollectionViewDataSource, UICo
     {
         dispatch_async(dispatch_get_main_queue()) {
            self.projectsCollectionView.reloadData();
+            if(App.Data.User.AccessToken != ""){
+            self.lastUpdateLabel.text = "Synced \(App.Data.SyncTimestamp.timeAgo())"
+            
+            }
+            else{
+                self.lastUpdateLabel.text = "Not logged in"
+            }
+            self.lastUpdateLabel.sizeToFit()
         }
     }
     
@@ -51,8 +72,8 @@ class ProjectsViewController: UIViewController, UICollectionViewDataSource, UICo
     func collectionView(collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-            let width = collectionView.bounds.size.width - 20.0;
-            let height = width * 0.8
+            let width = collectionView.bounds.size.width - 4.0;
+            let height = width * (3.0/4.0)
             return CGSizeMake(width, height)
     }
     
@@ -87,31 +108,39 @@ class ProjectsViewController: UIViewController, UICollectionViewDataSource, UICo
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         
         // 2
-        let deleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: {
-            (alert: UIAlertAction!) -> Void in
-            print("Project Delete \(itemId)")
-        })
+        
         let editAction = UIAlertAction(title: "Edit Project", style: .Default, handler: {
             (alert: UIAlertAction!) -> Void in
-            print("Project Edit \(itemId)")
+            App.Memory.selectedProject = App.Data.Projects[itemId];
+            self.performSegueWithIdentifier("editProjectSegue", sender: self)
+        })
+        
+        let changeImageAction = UIAlertAction(title: "Change Photo", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            App.Memory.selectedProject = App.Data.Projects[itemId];
+            //self.performSegueWithIdentifier("changeProjectPhotoSegue", sender: self)
         })
         
         //
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
             (alert: UIAlertAction!) -> Void in
-            print("Cancelled")
+            App.applyLightUI()
         })
         
         
         // 4
         optionMenu.addAction(editAction)
-        optionMenu.addAction(deleteAction)
+        optionMenu.addAction(changeImageAction)
         optionMenu.addAction(cancelAction)
         
         // 5
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }
 
+    
+    override func unwindForSegue(unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
+        App.Data.SyncTimestamp = NSDate()
+    }
     
 
 }

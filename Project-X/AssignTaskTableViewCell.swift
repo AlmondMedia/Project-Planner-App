@@ -31,9 +31,12 @@ class AssignTaskTableViewCell: UITableViewCell {
     var assignee : Assignee = Assignee() {
         didSet{
             nameLabel.text = assignee.Name
-            roleLabel.text = assignee.Profession
-            photoImage.image = UIImage(named: "ui-image-assignee-\(assignee.Id)") ?? UIImage(named: "ui-image-default-assignee-profile")
-            if(App.Memory.selectedTask?.Assignee_Id == assignee.Id){
+            roleLabel.text = assignee.Profession == "" ? "Role" : assignee.Profession;
+            photoImage.image = X.getImage(ImageGroup.Assignees, name: assignee.ResourceUID)
+            if(photoImage.image == nil){
+                photoImage.setImageWithString(assignee.Name)
+            }
+            if(App.Memory.selectedTask?.AssigneeLink == assignee.Email){
                 checkMarkImage.hidden = false;
             }
             else {

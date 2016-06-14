@@ -15,17 +15,19 @@ class AssigneeListViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
+        App.ContactsReloadedEvent.addHandler { self.tableView.reloadData()}
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
+        App.Memory.selectedAssignee = nil;
         self.tableView.reloadData()
     }
 
     @IBAction func accountBtnTapped(sender: AnyObject) {
+        App.Data.SyncTimestamp = NSDate()
+        App.SaveLocalData()
         self.navigationController!.tabBarController!.presentingViewController!.dismissViewControllerAnimated(true, completion: nil);
     }
     
@@ -68,6 +70,11 @@ class AssigneeListViewController: UIViewController, UITableViewDelegate, UITable
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         App.Memory.selectedAssignee = App.Memory.selectedProject!.Contacts[indexPath.row];
+    }
+    
+    func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+        App.Memory.selectedAssignee = App.Memory.selectedProject!.Contacts[indexPath.row];
+        self.performSegueWithIdentifier("editAssigneeSegue", sender: self);
     }
 
 }

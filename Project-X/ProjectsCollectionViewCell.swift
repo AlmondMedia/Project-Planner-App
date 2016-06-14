@@ -14,7 +14,8 @@ class ProjectsCollectionViewCell: UICollectionViewCell {
         didSet{
             titleLabel.text = project.Title;
             dueDate.text = X.getDateString(project.DueDate, format: "dd MMM yyyy")
-            templateImage.image = UIImage(named: "ui-image-\(project.ProjectType)")
+            templateImage.image = UIImage(named: "ui-image-\(project.ProjectType)") ?? UIImage(named: "ui-image-project-default");
+            cardView.layer.borderWidth = 1;
         }
     }
     @IBOutlet weak var cardView: CardView!

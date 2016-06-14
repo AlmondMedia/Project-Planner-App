@@ -16,6 +16,13 @@ class TasksCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
 
         self.calculateScreenSizeLayout();
+        App.TasksReloadedEvent.addHandler {self.refereshView()}
+    }
+    func refereshView()
+    {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.collectionView?.reloadData();
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -41,6 +48,8 @@ class TasksCollectionViewController: UICollectionViewController {
     
     
     @IBAction func accountBtnTapped(sender: AnyObject) {
+        App.Data.SyncTimestamp = NSDate()
+        App.SaveLocalData()
         self.navigationController!.tabBarController!.presentingViewController!.dismissViewControllerAnimated(true, completion: nil);
     }
     

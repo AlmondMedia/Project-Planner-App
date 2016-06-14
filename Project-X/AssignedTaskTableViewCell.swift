@@ -33,7 +33,13 @@ class AssignedTaskTableViewCell: UITableViewCell {
             taskActivitiesLabel.text = "\(task.Activities.count) Activities"
             
             let dueActivities = App.getTaskActivityBoard(task).DueActivities.count;
-            taskDueActivitiesLabel.text = "\(dueActivities)"
+            if(dueActivities > 0){
+                taskDueActivitiesLabel.text = "\(dueActivities) Due";
+                taskDueActivitiesLabel.alpha = 0.5
+            }
+            else{
+                taskDueActivitiesLabel.text = "";
+            }
             if(dueActivities == 0){
                 statusView.backgroundColor = App.successColor
             }

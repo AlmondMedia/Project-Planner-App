@@ -19,12 +19,25 @@ class TaskCollectionViewCell: UICollectionViewCell {
     var task : Task = Task() { didSet{
         
             titleLabel.text = task.Title.uppercaseString // + " Works";
-            let image = UIImage(named: "ui-image-assignee-\(task.Assignee_Id)")
+            let assignee =  App.getTaskAssignee(task)
+            let image = X.getImage(ImageGroup.Assignees, name: assignee?.ResourceUID ?? "-")
             //UIImage(named: "ui-icon-\(task.Title)")
-            mainImageView.image = image ?? UIImage(named: "ui-icon-Task")
+            mainImageView.image = image
+        if(mainImageView.image == nil){
+            mainImageView.setImageWithString(assignee?.Name ?? "")
+        }
             mainImageView.tintColor = UIColor.clearColor()
             mainImageView.setRadius(mainImageView.frame.height / 2.0)
         
+        var remainingBudget = task.Budget.doubleValue - App.getTaskCosts(task).TotalCost.doubleValue
+        if(remainingBudget < 0){
+            budgetIndicatorLabel.text = "OVERBOARD"
+            remainingBudget = remainingBudget * -1
+        }
+        else{
+            budgetIndicatorLabel.text = "REMAINING"
+        }
+        remainingBudgetLabel.text = X.numToCurrency(NSDecimalNumber(double: remainingBudget));
         
         
         if(task.Activities.count > 0){
@@ -33,15 +46,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
                 }.count);
             pendingActivityLabel.text = X.formatNumber(NSDecimalNumber(double: Double(task.Activities.count - activitiesCompleted)));
             
-            var remainingBudget = task.Budget.doubleValue - App.getTaskCosts(task).TotalCost.doubleValue
-            if(remainingBudget < 0){
-                budgetIndicatorLabel.text = "OVERBOARD"
-                remainingBudget = remainingBudget * -1
-            }
-            else{
-                budgetIndicatorLabel.text = "REMAINING"
-            }
-            remainingBudgetLabel.text = X.numToCurrency(NSDecimalNumber(double: remainingBudget));
+            
             
             let percentage : Double = (Double(activitiesCompleted) / Double(task.Activities.count))
             taskProgressView.progress = Float(percentage)
@@ -50,6 +55,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
             progressIndicator.trackColor = UIColor.whiteColor();
             progressIndicator.progressColors = [App.successColor];
         }else{
+            pendingActivityLabel.text = "0";
             progressIndicator.angle = 0
             taskProgressView.progress = 0
         }

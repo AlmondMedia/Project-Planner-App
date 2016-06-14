@@ -21,20 +21,26 @@ class ProjecTemplateSelectionViewController: UIViewController, UICollectionViewD
         
         let filter : FilterBar = FilterBar()
         
-        filter.titles = ["Home", "Events", "Travel"]
+        filter.titles = ["Home", "Events", "Travel", "Saved"]
         filter.translucent = false
         self.view.addSubview(filter)
         let topConstraint : NSLayoutConstraint = NSLayoutConstraint(item: filter, attribute: .Top, relatedBy: .Equal, toItem: self.topLayoutGuide, attribute: .Bottom, multiplier: 1.0, constant: 0.0)
         self.view.addConstraint(topConstraint)
         filter.addTarget(self, action: #selector(ProjecTemplateSelectionViewController.segmentChanged(_:)), forControlEvents: .ValueChanged)
         
-        templateGroups = [App.Data.Templates,[], []];
+        templateGroups = [App.Memory.Templates,[], [], []];
+        let emptyTemplate = ProjectTemplate();
+        emptyTemplate.Title = "Blank Project"
+        emptyTemplate.Description = "Create new project with no default tasks"
+        for index in 0...(templateGroups.count - 1) {
+            templateGroups[index].insert(emptyTemplate, atIndex: 0)
+        }
         selectedTemplateGroup = templateGroups[0];
         
         self.calculateScreenSizeLayout();
     }
     
-    var templateGroups : [[ProjectTemplate]] = [App.Data.Templates,[], []];//= App.Data.Templates;
+    var templateGroups : [[ProjectTemplate]] = [App.Memory.Templates,[], []];//= App.Data.Templates;
     var selectedTemplateGroup : [ProjectTemplate] = [];
     
     
